@@ -10,46 +10,24 @@ from sklearn.impute import KNNImputer
 import streamlit.components.v1 as components
 from sklearn.linear_model import LinearRegression
 
-# Para garantizar que la imagen se muestra correctamente, también podemos usar `st.image`
-st.image("https://drive.google.com/file/d/1ER5ZNehTgpfbJzyVrUtalbjZ2g-mqIpE/view?usp=sharing", caption="Esta es una imagen desde una URL")
-
 
 
 
 # Etiqueta personalizada utilizando Markdown
 st.markdown("""
-# 🎉 **Bienvenido a Mi Aplicación**
-### 🚀 *¡Listo para despegar al mundo de los datos!*
+# 💡 **Proyecto Final de Paradigmas de la Programación**
+### 🎓 **¡Alumno: Nixon Villavicencio!**
 
 ---
-## Características Principales:
-1. **Interfaz Intuitiva**: Fácil de usar y navegar.
-2. **Análisis Rápido**: Procesa datos en tiempo real.
-3. **Resultados Visuales**: Gráficos y tablas interactivas.
-4. **Flexibilidad**: Compatible con múltiples formatos de archivo.
-
-#### Contacto:
-📧 [Correo Electrónico](mailto:ejemplo@correo.com)
-🌐 [Visita Nuestra Página Web](https://www.ejemplo.com)
+## Módulos implementados:
+1. **Carga de Dataset**: permite la carga de archivos tipo CSV, XLSX, XLSX.
+2. **Módulo de EDA**: implementa funcionalidades para el Análisis Exploratorio de Datos.
+3. **Módulo de Regresiones**: permite aplicar regresión lineal simple a cuaquier variable numérica.
+4. **Generación de Informes**: crea y exporta un archivo XLSX con los descriptivos.
 
 ---
 
-¡Explora y disfruta la experiencia! 😄
 """)
-
-# Añadir un texto simple para complementar
-st.write("Esta es una aplicación de ejemplo que muestra cómo personalizar etiquetas usando Markdown en Streamlit.")
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -57,7 +35,7 @@ st.write("Esta es una aplicación de ejemplo que muestra cómo personalizar etiq
 
 # Título de la aplicación
 html_code = """
-<div style='font-size:40px; color:#000000; text-align:center; background-color:#FFA500; padding:10px; border-radius:10px;'>
+<div style='font-size:50px; color:#000000; text-align:center; background-color:#FFA500; padding:10px; border-radius:10px;'>
     Herramienta de Análisis de Datos Interactiva en Streamlit
 </div>
 """
@@ -66,7 +44,10 @@ components.html(html_code)
 
 
 # Sección 1: Carga DATASET
-st.header("1. Carga de Dataset")
+# Texto personalizado utilizando Markdown
+st.markdown("""
+# 1. CARGA DE DATASET 📂
+""")
 
 # Widget para cargar archivos
 uploaded_file = st.file_uploader("Elige un archivo", type=["csv", "xlsx", "xls"])
@@ -86,8 +67,17 @@ else:
     st.info("Por favor, carga un archivo en formato .CSV, .XLSX o .XLS.")
 
 
-# Sección 2: Análisis Exploratorio de Datos (EDA)
-st.header("2. Módulo de EDA")
+
+
+
+
+######################################################## Sección 2: Módulo de EDA
+
+# Texto personalizado utilizando Markdown
+st.markdown("""
+# 2. MÓDULO DE EDA 📊
+""")
+
 
 if uploaded_file is not None:
     # Resumen Estadístico
@@ -162,10 +152,9 @@ if uploaded_file is not None:
         st.write(df_cleaned.head())
 
         # Widget para descargar el nuevo archivo con los datos limpiados
-        st.subheader("Descargar Archivo con Datos Limpiados")
         csv_cleaned = df_cleaned.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="Descargar CSV Limpiado",
+            label="💾 Descargar CSV Limpiado",
             data=csv_cleaned,
             file_name='datos_limpiados.csv',
             mime='text/csv',
@@ -181,10 +170,9 @@ if uploaded_file is not None:
         st.write(df_filled.head())
 
         # Widget para descargar el nuevo archivo con los datos llenados
-        st.subheader("Descargar Archivo con Datos Llenados")
         csv_filled = df_filled.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="Descargar CSV Llenado",
+            label="💾 Descargar CSV Llenado",
             data=csv_filled,
             file_name='datos_llenos.csv',
             mime='text/csv',
@@ -208,10 +196,9 @@ if uploaded_file is not None:
     st.write(df.head())
     
     # Widget para descargar el nuevo archivo con los datos imputados
-    st.subheader("Descargar Archivo con Datos Imputados")
     csv = df.to_csv(index=False).encode('utf-8')
     st.download_button(
-        label="Descargar CSV",
+        label="💾 Descargar CSV Imputado",
         data=csv,
         file_name='datos_imputados.csv',
         mime='text/csv',
@@ -222,8 +209,15 @@ if uploaded_file is not None:
 
 
 
-# Sección 3: Módulo de Regresiones
-st.header("3. Módulo de Regresiones")
+#################################################### Sección 3: Módulo de Regresiones
+
+
+# Texto personalizado utilizando Markdown
+st.markdown("""
+# 3. MÓDULO DE REGRESIONES 📈
+""")
+
+
 
 if uploaded_file is not None:
     # Filtrar solo las columnas con datos numéricos
@@ -252,7 +246,7 @@ if uploaded_file is not None:
 
 
 
-# Sección 4: Generación de Informes
+#################################################### Sección 4: Generación de Informes
 
 
 def generar_estadisticas(df):
@@ -274,7 +268,10 @@ def exportar_excel(df):
 
 
 
-st.header("4. Generación de Informes")
+# Texto personalizado utilizando Markdown
+st.markdown("""
+# 4. GENERACIÓN DE INFORMES 📝
+""")
 
 if uploaded_file is not None:
     if st.button("Ejecutar Análisis Descriptivo al Dataset"):
@@ -291,7 +288,7 @@ if uploaded_file is not None:
 
         # Descargar el archivo
         st.download_button(
-            label="Descargar XLSX con estadísticas",
+            label="💾 Descargar XLSX con estadísticas",
             data=processed_data,
             file_name='estadisticas_dataset.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
