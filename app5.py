@@ -10,6 +10,47 @@ from sklearn.impute import KNNImputer
 import streamlit.components.v1 as components
 from sklearn.linear_model import LinearRegression
 
+
+
+# Etiqueta personalizada utilizando Markdown
+st.markdown("""
+# 🎉 **Bienvenido a Mi Aplicación**
+### 🚀 *¡Listo para despegar al mundo de los datos!*
+
+---
+## Características Principales:
+1. **Interfaz Intuitiva**: Fácil de usar y navegar.
+2. **Análisis Rápido**: Procesa datos en tiempo real.
+3. **Resultados Visuales**: Gráficos y tablas interactivas.
+4. **Flexibilidad**: Compatible con múltiples formatos de archivo.
+
+#### Contacto:
+📧 [Correo Electrónico](mailto:ejemplo@correo.com)
+🌐 [Visita Nuestra Página Web](https://www.ejemplo.com)
+
+---
+
+¡Explora y disfruta la experiencia! 😄
+""")
+
+# Añadir un texto simple para complementar
+st.write("Esta es una aplicación de ejemplo que muestra cómo personalizar etiquetas usando Markdown en Streamlit.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Título de la aplicación
 html_code = """
 <div style='font-size:40px; color:#000000; text-align:center; background-color:#FFA500; padding:10px; border-radius:10px;'>
