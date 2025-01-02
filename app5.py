@@ -16,21 +16,15 @@ from sklearn.linear_model import LinearRegression
 # Etiqueta personalizada utilizando Markdown
 st.markdown("""
 # 💡 **Proyecto Final de Paradigmas de la Programación**
-### 🎓 **¡Alumno: Nixon Villavicencio!**
-
+### 🎓 **Alumno: Nixon Villavicencio**
 ---
 ## Módulos implementados:
 1. **Carga de Dataset**: permite la carga de archivos tipo CSV, XLSX, XLSX.
 2. **Módulo de EDA**: implementa funcionalidades para el Análisis Exploratorio de Datos.
 3. **Módulo de Regresiones**: permite aplicar regresión lineal simple a cuaquier variable numérica.
 4. **Generación de Informes**: crea y exporta un archivo XLSX con los descriptivos.
-
 ---
-
 """)
-
-
-
 
 
 # Título de la aplicación
@@ -43,7 +37,7 @@ components.html(html_code)
 
 
 
-# Sección 1: Carga DATASET
+######################################################### Sección 1: Carga DATASET
 # Texto personalizado utilizando Markdown
 st.markdown("""
 # 1. CARGA DE DATASET 📂
@@ -65,8 +59,6 @@ if uploaded_file is not None:
         st.error(f"Error al cargar el archivo: {e}")
 else:
     st.info("Por favor, carga un archivo en formato .CSV, .XLSX o .XLS.")
-
-
 
 
 
@@ -127,12 +119,6 @@ if uploaded_file is not None:
 
 
 
-
-
-
-
-
-
     # Manejo de Datos Faltantes
     st.subheader("Manejo de Datos Faltantes")
     
@@ -146,9 +132,9 @@ if uploaded_file is not None:
 
     # Widget para aplicar la función dropna
     st.subheader("Limpieza de Datos")
-    if st.button("Aplicar función dropna"):
+    if st.button("Aplicar función Dropna"):
         df_cleaned = df.dropna()
-        st.write("Datos después de aplicar dropna:")
+        st.write("Datos después de aplicar Dropna:")
         st.write(df_cleaned.head())
 
         # Widget para descargar el nuevo archivo con los datos limpiados
@@ -179,7 +165,7 @@ if uploaded_file is not None:
         )
 
 
-
+    # Widget para imputación de valores faltantes, mediante botón de selección
     st.subheader("Imputación de Valores Faltantes")
     numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
     imputation_method = st.selectbox("Selecciona el método de imputación", ["Media", "Mediana", "KNN"])
@@ -293,3 +279,6 @@ if uploaded_file is not None:
             file_name='estadisticas_dataset.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
+
+
+############## final del código ######################
