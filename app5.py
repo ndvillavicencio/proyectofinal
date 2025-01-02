@@ -1,4 +1,5 @@
 import os
+import io
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -7,6 +8,7 @@ import seaborn as sns
 import streamlit as st
 from sklearn.impute import KNNImputer
 import streamlit.components.v1 as components
+from sklearn.linear_model import LinearRegression
 
 # Título de la aplicación
 html_code = """
@@ -68,7 +70,7 @@ if uploaded_file is not None:
     
 
 
-
+    # Gráficos bivariantes
     # Filtrar solo las columnas numéricas
     numeric_df = df.select_dtypes(include=[np.number])
 
@@ -104,7 +106,48 @@ if uploaded_file is not None:
     sns.heatmap(df.isnull(), cbar=False, cmap='viridis')
     st.pyplot(fig)
     
-    st.write("Imputación de Valores Faltantes")
+
+
+
+    # Widget para aplicar la función dropna
+    st.subheader("Limpieza de Datos")
+    if st.button("Aplicar función dropna"):
+        df_cleaned = df.dropna()
+        st.write("Datos después de aplicar dropna:")
+        st.write(df_cleaned.head())
+
+        # Widget para descargar el nuevo archivo con los datos limpiados
+        st.subheader("Descargar Archivo con Datos Limpiados")
+        csv_cleaned = df_cleaned.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="Descargar CSV Limpiado",
+            data=csv_cleaned,
+            file_name='datos_limpiados.csv',
+            mime='text/csv',
+        )
+
+
+
+    # Widget para aplicar la función fillna con método ffill
+    st.subheader("Llenado de Datos Faltantes")
+    if st.button("Aplicar función fillna (ffill)"):
+        df_filled = df.fillna(method='ffill')
+        st.write("Datos después de aplicar fillna (ffill):")
+        st.write(df_filled.head())
+
+        # Widget para descargar el nuevo archivo con los datos llenados
+        st.subheader("Descargar Archivo con Datos Llenados")
+        csv_filled = df_filled.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="Descargar CSV Llenado",
+            data=csv_filled,
+            file_name='datos_llenos.csv',
+            mime='text/csv',
+        )
+
+
+
+    st.subheader("Imputación de Valores Faltantes")
     numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
     imputation_method = st.selectbox("Selecciona el método de imputación", ["Media", "Mediana", "KNN"])
     
@@ -118,7 +161,7 @@ if uploaded_file is not None:
     
     st.write("Datos después de la imputación:")
     st.write(df.head())
-
+    
     # Widget para descargar el nuevo archivo con los datos imputados
     st.subheader("Descargar Archivo con Datos Imputados")
     csv = df.to_csv(index=False).encode('utf-8')
@@ -130,3 +173,81 @@ if uploaded_file is not None:
     )
 
 
+
+
+
+
+# Sección 3: Módulo de Regresiones
+st.header("3. Módulo de Regresiones")
+
+if uploaded_file is not None:
+    # Filtrar solo las columnas con datos numéricos
+    numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
+
+    # Widget para seleccionar una variable numérica para regresión lineal simple
+    st.subheader("Regresión Lineal Simple")
+    selected_var = st.selectbox("Selecciona una variable numérica para aplicar regresión lineal", numeric_columns)
+
+    if st.button("Aplicar Regresión Lineal"):
+        X = df[[selected_var]].dropna().values.reshape(-1, 1)
+        y = df[selected_var].dropna().values
+
+        # Aplicar regresión lineal simple
+        model = LinearRegression()
+        model.fit(X, y)
+        y_pred = model.predict(X)
+
+        # Crear un DataFrame con los datos originales y los datos predichos
+        results_df = pd.DataFrame({selected_var: y, 'Predicción': y_pred})
+
+        # Generar gráfico de dispersión con datos originales y predichos
+        fig = px.scatter(results_df, x=selected_var, y='Predicción', title=f'Regresión Lineal Simple para {selected_var}')
+        fig.add_scatter(x=results_df[selected_var], y=results_df[selected_var], mode='lines', name='Original')
+        st.plotly_chart(fig)
+
+
+
+# Sección 4: Generación de Informes
+
+
+def generar_estadisticas(df):
+    """
+    Genera Estadísticas descriptivas de un dataframe
+    """
+    return df.describe()
+
+def exportar_excel(df):
+    """
+    Exporta un dataframe a un archivo excel
+    """
+    output = io.BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name="Estadísticas")
+    writer.close()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+
+st.header("4. Generación de Informes")
+
+if uploaded_file is not None:
+    if st.button("Ejecutar Análisis Descriptivo al Dataset"):
+        # Aplicar la función describe
+        stats = df.describe()
+        st.dataframe(df.describe())
+
+        # Convertir a XLSX
+        output = io.BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        stats.to_excel(writer, sheet_name='Estadísticas')
+        writer.close()
+        processed_data = output.getvalue()
+
+        # Descargar el archivo
+        st.download_button(
+            label="Descargar XLSX con estadísticas",
+            data=processed_data,
+            file_name='estadisticas_dataset.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
