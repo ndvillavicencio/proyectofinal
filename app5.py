@@ -10,6 +10,10 @@ from sklearn.impute import KNNImputer
 import streamlit.components.v1 as components
 from sklearn.linear_model import LinearRegression
 
+# Para garantizar que la imagen se muestra correctamente, también podemos usar `st.image`
+st.image("https://drive.google.com/file/d/1ER5ZNehTgpfbJzyVrUtalbjZ2g-mqIpE/view?usp=sharing", caption="Esta es una imagen desde una URL")
+
+
 
 
 # Etiqueta personalizada utilizando Markdown
