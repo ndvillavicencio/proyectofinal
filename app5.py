@@ -9,6 +9,7 @@ import streamlit as st
 from sklearn.impute import KNNImputer
 import streamlit.components.v1 as components
 from sklearn.linear_model import LinearRegression
+import matplotlib.backends.backend_pdf
 
 
 
@@ -252,6 +253,17 @@ def exportar_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
+def exportar_pdf(df, filename):
+    """
+    Exporta un dataframe a un archivo PDF
+    """
+    pdf = matplotlib.backends.backend_pdf.PdfPages(filename)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.axis('tight')
+    ax.axis('off')
+    table = ax.table(cellText=df.values, colLabels=df.columns, cellLoc='center', loc='center')
+    pdf.savefig(fig, bbox_inches='tight')
+    pdf.close()
 
 
 # Texto personalizado utilizando Markdown
@@ -260,25 +272,21 @@ st.markdown("""
 """)
 
 if uploaded_file is not None:
-    if st.button("Ejecutar Análisis Descriptivo al Dataset"):
-        # Aplicar la función describe
-        stats = df.describe()
-        st.dataframe(df.describe())
+      if st.button("Generar Estadísticas y Exportar a PDF"):
+        # Aplicar la función describe a las columnas numéricas
+        numeric_df = df.select_dtypes(include=[np.number])
+        stats = numeric_df.describe()
+        st.write(stats)
 
-        # Convertir a XLSX
-        output = io.BytesIO()
-        writer = pd.ExcelWriter(output, engine='xlsxwriter')
-        stats.to_excel(writer, sheet_name='Estadísticas')
-        writer.close()
-        processed_data = output.getvalue()
+        # Exportar a PDF
+        exportar_pdf(stats, "estadisticas_dataset.pdf")
 
-        # Descargar el archivo
-        st.download_button(
-            label="💾 Descargar XLSX con estadísticas",
-            data=processed_data,
-            file_name='estadisticas_dataset.xlsx',
-            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        )
-
-
+        # Descargar el archivo PDF
+        with open("estadisticas_dataset.pdf", "rb") as pdf_file:
+            st.download_button(
+                label="💾 Descargar PDF con estadísticas",
+                data=pdf_file,
+                file_name='estadisticas_dataset.pdf',
+                mime='application/pdf',
+            )
 ############## final del código ######################
